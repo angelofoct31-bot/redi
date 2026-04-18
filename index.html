@@ -176,21 +176,49 @@
 </div>
 
 <script>
+<script>
 function payNow() {
+
   var options = {
     key: "rzp_live_SdghPoD6slRXBu",
-    amount: "1000",
+
+    amount: 1000, // ✅ FIXED (number, not string)
     currency: "INR",
     name: "Vemanas",
 
-handler: function (response) {
-    alert("Payment successful!");
-    window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSeQbpIy6h79lzMqh_ajM-Ls_q52oDfsiU5v5oqki2duN7yB_A/viewform?usp=dialog";
-  }
-  };   
+    description: "Internship Application Fee",
+
+    handler: function (response) {
+      alert("Payment Successful!");
+
+      console.log("Payment ID:", response.razorpay_payment_id);
+
+      window.location.href =
+        "https://docs.google.com/forms/d/e/1FAIpQLSeQbpIy6h79lzMqh_ajM-Ls_q52oDfsiU5v5oqki2duN7yB_A/viewform?usp=dialog";
+    },
+
+    modal: {
+      ondismiss: function () {
+        console.log("Checkout closed by user");
+      }
+    },
+
+    theme: {
+      color: "#0d47a1"
+    }
+  };
+
   var rzp = new Razorpay(options);
+
+  // 🔴 IMPORTANT ERROR TRACKING
+  rzp.on('payment.failed', function (response){
+    alert("Payment Failed");
+    console.log(response.error);
+  });
+
   rzp.open();
 }
+</script>
 </script>
 
 </body>
